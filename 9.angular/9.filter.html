@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div ng-controller="ctrl">
+    {{'bdedasdasd' | capitalize:5}}
+   {{str}}
+</div>
+<script src="angular.js"></script>
+<script>
+    var app = angular.module('zfModule',[]);
+    //创建自定义过滤器也是通过模块创建
+    //param1叫过滤器的名字
+    //在我们自定义过滤器中也可以使用定义好的过滤器(过滤器中在调用过滤器)
+    app.filter('capitalize', function (uppercaseFilter) {
+        return function (input,len) {
+            //input代表要过滤的内容
+            return uppercaseFilter(input.slice(0,len))+input.slice(len)
+        }
+    });
+    //想在控制器中使用过滤器，把值过滤好后，绑定到页面上
+    //在设置好的过滤器增加Filter后缀进行使用
+    app.controller('ctrl', function ($scope,capitalizeFilter) {
+        $scope.str='abcd';
+//第一位是我们要过滤的字符串，第二个是后面的参数 'abcd' | capitalize:1
+        $scope.str = capitalizeFilter($scope.str,1);
+    })
+</script>
+</body>
+</html>

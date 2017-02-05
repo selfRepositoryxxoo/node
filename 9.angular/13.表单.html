@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="bootstrap.css">
+</head>
+<body>
+<div ng-controller="ctrl">
+    <!--我们用angular验证就要关闭h5的验证-->
+    <form name="myform" novalidate>
+        <div class="form-group">
+            <label class="control-label">邮箱</label>
+            <input type="email" name="email" ng-model="email" class="form-control" ng-required="true" ng-maxlength="5" ng-pattern="/^.*$/">
+        </div>
+        <div class="alert-danger alert" ng-show="myform.email.$error.email">邮箱不和法</div>
+        <div class="alert-danger alert" ng-show="myform.email.$dirty&&myform.email.$error.required">邮箱必填</div>
+        <div class="alert-danger alert" ng-show="myform.email.$error.maxlength">邮箱过长</div>
+        <div class="alert-danger alert" ng-show="myform.email.$error.pattern">正则不和法</div>
+        <!--ng-diabled为true时当前按钮不可用-->
+        <button type="submit" class="btn" ng-disabled="myform.email.$invalid">提交</button>
+
+    </form>
+    <pre>
+        {{myform |json}}
+    </pre>
+</div>
+<script src="angular.js"></script>
+<script>
+    var app = angular.module('zfModule',[]);
+    app.controller('ctrl', function ($scope) {
+
+    })
+</script>
+</body>
+</html>

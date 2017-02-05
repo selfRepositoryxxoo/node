@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body >
+<div ng-controller="firstCtrl">
+    <input type="text" ng-model="name" id="input1">
+    {{name?name:'zfpx'}}
+    <div ng-controller="secondCtrl">
+        {{name?name:'zfpx'}}
+    </div>
+</div>
+{{age}}
+<!--可以使用三元表达式，还可以用作计算结果,还可以得到函数的返回值-->
+<!--ng-model找最近的作用域，没有的话声明-->
+<script src="angular.js"></script>
+<script>
+    //当我们引入angularjs后会得到一个angular对象
+    //console.log(angular);
+    //一切从模块开始
+    //1.param1指定模块名字
+    //2.依赖的模块 默认为空数组[],不写的话变成了获取模块
+    //3.配置
+    //返回值是当前的模块
+    var app = angular.module('zfModule',[]);
+    //在angular启动时最先执行的，一般用来配置默认属性
+    app.run(['$rootScope',function ($rootScope) {
+        $rootScope.age = 100;
+    }]);
+    //app = angular.moudle('zfModule');
+    //声明控制器,通过模块来声明控制器
+    //当我们声明一个控制器的时候，会赠送一个$scope = {}
+    app.controller('firstCtrl', function ($scope) {
+        //$rootScope.age = 100; //所有挂载在rootScope上的元素都可以在ng-app的范围内取到
+        //input1.style.border="1px solid red";不要操作dom
+        //$scope就是viewModel
+        //$scope.name = 100; //在当前作用域下会声明一个name属性，控制器会创建一个作用域
+    });//使用控制器，指定适用范围作用在html标签上 ng-controller
+    app.controller("secondCtrl",['$scope',function(a){a.name=200}]);
+    //angular默认注入的叫$scope，名字变成a
+    //子控制器会继承父控制器，父无法继承子控制器
+</script>
+</body>
+</html>

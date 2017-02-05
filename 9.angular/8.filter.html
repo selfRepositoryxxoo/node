@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div ng-controller="ctrl">
+    {{13.13 | currency:'￡'}}
+    {{'aaa' | uppercase}}
+    {{'AAA' | lowercase}}
+    {{'1234123ASDASD' | limitTo:6}}
+    {{123.23212312313 | number:4}}
+    <!--指定限定的小数点位数-->
+    <pre>
+            {{obj |json:4}}
+    </pre>
+    {{1468729717107| date:'yyyy年MM月dd日hh小时ss秒'}} <br>
+
+    <input type="text" ng-model="query" ng-model-options="{debounce:2000}">
+    <!--在失去焦点的时候在刷新我们的模型-->
+    <!--延迟刷新模型-->
+    
+    <button ng-click="flag = !flag">{{flag?"降序":"升序"}}</button>
+    <!--限定筛选范围-->
+    <div ng-repeat="d in data | orderBy:'name':flag | filter:{age:query}">
+        {{d.name}} {{d.age}}
+    </div>
+</div>
+<script src="angular.js"></script>
+<script>
+    var app = angular.module('zfModule',[]);
+    app.controller('ctrl', function ($scope) {
+        $scope.flag = true;
+        $scope.obj = {
+            name:1,
+            age:2,
+            cc:4
+        }
+        $scope.data = [
+            {name:'jw',age:18},
+            {name:'zf1',age:60},
+            {name:'angular',age:5},
+            {name:'nodejs',age:11},
+        ]
+    });
+</script>
+</body>
+</html>

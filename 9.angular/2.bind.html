@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div ng-controller="ctrl">
+    {{name}}
+    <!--使用ng-bind来绑定数据防止闪烁-->
+    <div ng-bind="name"></div>
+    <div ng-non-bindable>{{name}}</div>
+    {{<span>{{name}}</span>}}
+    <!--用来将原封不动的输出大括号的方式-->
+
+    <div ng-bind-template="{{name}} {{age}}"></div>
+    <div ng-bind-html="age"></div>
+</div>
+<script src="angular.js"></script>
+<script>
+    var app = angular.module('zfModule',[]);
+    app.controller('ctrl', function ($scope,$sce) {
+        $scope.name = 'hello world';
+        //让我们的html以html格式输出
+        $scope.age = $sce.trustAsHtml('<h1>123</h1>');
+    })
+</script>
+</body>
+</html>

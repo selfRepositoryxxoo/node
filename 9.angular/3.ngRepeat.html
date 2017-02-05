@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div ng-controller="ctrl">
+    <!--<div ng-repeat="(key,value) in obj">
+        {{key}} {{value}} {{$index}} {{$even}} {{$odd}} {{$last}} {{$first}}
+    </div>-->
+    <!--当前的key带表的是当前数组的索引-->
+    <!--<div ng-repeat="a in arr" ng-init="key=$index">
+        {{a.name}}
+        <div ng-repeat="t in a.type">
+            {{key}}{{$index}}   {{t}}
+        </div>
+    </div>-->
+    <div ng-repeat="a in arr1 ">
+       {{a.name}}
+    </div>
+    <!--遍历数组时候要加trackby属性-->
+</div>
+<script src="angular.js"></script>
+<script>
+    var app = angular.module('zfModule',[]);
+    app.controller('ctrl', function ($scope) {
+        $scope.arr = [
+            {name:'苹果',type:["4s","5","6plus"]},
+            {name:'三星',type:["note","g"]}
+        ];
+        $scope.arr1 = [
+            {name:'苹果'},
+            {name:'苹果'},
+            {name:'苹果'},
+            {name:'苹果'},
+        ];
+        /*$scope.obj = {
+            name:'zfpx',
+            age:8,
+        }*/
+    })
+</script>
+</body>
+</html>

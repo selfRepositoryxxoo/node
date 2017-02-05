@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div ng-controller="ctrl">
+    <input type="text" ng-model="name">
+    <div ng-switch="name">
+        <!--是hello字符串不是hello变量-->
+        <div ng-switch-when="hello">123hello</div>
+        <div ng-switch-when="world">456world</div>
+        <div ng-switch-default>以上均不是</div>
+    </div>
+</div>
+<script src="angular.js"></script>
+<script>
+    var app = angular.module('zfModule',[]);
+    app.controller('ctrl', function ($scope) {
+        //ngswitch和switch-when连用 switch case
+    })
+</script>
+</body>
+</html>

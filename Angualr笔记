@@ -1,0 +1,212 @@
+Angular.js的优点
+  1.是现在使用最广的框架之一
+  2.前后端分离，后端只提供数据接口，路由，模板渲染等都在前端完成
+  3.html和js分离，展示和逻辑分离
+  4.减少js代码，减少DOM元素的查找，事件绑定等代码
+MVC是什么
+   Model数据模型层
+   View是视图层，负责展示
+   Controller 业务逻辑和控制逻辑
+   优点：
+      1，代码规模越来越大，切分职责
+      2.相同逻辑代码需要复用
+      3.需求变更需要重构、
+
+1.ng-model:挂在数据 {{name}}将挂载的数据取出来
+2.ng-app:告诉angualar的启动范围
+3.$rootScope当前根作用域
+   js中 全局window
+   node.js是global
+4.所有带ng开头的都是angualr自带的指令
+5.解决闪烁问题 防止用户看到渲染之前的样子
+       <input type="text" ng-model="name"/>
+       {{name}}
+       <div ng-bind="name"></div>
+       <div ng-cloak>{{name}}</div>
+       style:[ng-cloak]{display:none}
+6.数据绑定：
+        name:<input type="text" ng-model="name"/><br/>
+        age:<input type="text" ng-model="age"/>
+   ng-bind 显示数据类似于 {{}} 防止用户看到被渲染之前的样子
+       ng-bind:<div ng-bind="name?name:'zfpx'"></div>
+   ng-bind-template 解决 ng-bind 中只能绑定一个的问题
+       <div ng-bind-template="{{name}}{{age}}"></div>
+   ng-non-bindable 取消绑定
+7.tips:如果不是angualr中的变量要用''包起来变成字符串
+8.ng-init:
+       ng-init 指令为 AngularJS 应用程序定义了 初始值。
+       不仅可以赋值字符串,也可以赋值数字,数组,对象
+       tips:通常情况下不用ng-init而是用controller或者模块代替
+        <div ng-init="name=[{name:'tc'}]">
+            <input type="text" ng-model="name[0].name"/>
+        </div>
+9.ng-repeat:
+          可以遍历数组和对象，遍历数组相同的时候注意track by $index
+10. ng-click
+11. ng-hide/ng-show/ng-if:
+        布尔类型 为true执行内部指令，为false时不执行内部指令
+         ng-if为false时候内部节点消失
+12.ng-switch
+        <input type="text" ng-model="name"/>
+        <div ng-switch="name">
+              <div ng-switch-when="hello">你好</div>
+            <div ng-switch-when="sunshine">阳光</div>
+            <div ng-switch-default>向日葵</div>
+        </div>
+13.ng-class可以和class共存
+14.ng-include加载外部模板，引入别的页面
+     <div ng-include="'tmpl.html'"></div>
+15.过滤器
+           货币过滤器   currency    currency:'￡' 后面的参数表示钱的种类<br/>
+           大小写转化过滤器 uppercase lowercase   <br/>
+           限制位数    limitTo  limitTo 截取多少位   时间戳 (由13位组成)通常是一个字符序列，唯一地标识某一刻的时间<br/>
+           数字过滤器  number  将数字转成千位符，并四舍五入<br/>
+           对象过滤器  json  转换成json对象<br/>
+           日期过滤器  date   后面是格式 data:'yyyy-MM-dd hh:mm:ss'<br/>
+           filter过滤器： filter的用法 filter:query 我们要查询的值(是在所有数据中查询)<br/>
+                       filter:{'要搜索的字段'：查询的值}<br/>
+16.常用的工具方法
+            angular.uppercase
+            angular.lowercase
+            angular.equals
+            angular.extend
+            angular.fromJson  相当于JSON.parse
+            angular.toJson   相当于JSON.stringify
+            angular.copy(obj1,obj2) obj拷贝给obj2 obj2的值会被覆盖掉
+            angular.forEach
+            angular.bind
+17. $scope和$rootscope的区别
+    $scope MVVM=Model View viewModel=$scope
+    scope是angularJS中的作用域(其实就是存储数据的地方)，很类似javascript的原型链 。搜索的时候，
+优先找自己的scope，如果没有找到就沿着作用域链向上搜索，直至到达根作用域rootScope。
+$rootScope是由angularJS加载模块的时候自动创建的，每个模块只会有1个rootScope。
+rootScope创建好会以服务的形式加入到 $injector中。也就是说通过 $injector.get("$ rootScope ");
+能够获取到某个模块的根作用域。更准确的来说，$rootScope是由angularJS的核心模块ng创建的。
+
+scope是html和单个controller之间的桥梁，数据绑定就靠他了。rootscope是各个controller中scope的桥梁。
+用rootscope定义的值，可以在各个controller中使用
+
+$rootScope的作用是放子作用器上的公有属性和方法
+
+
+
+
+18.控制器的特点
+           controller和DOM平行
+           控制器可以声明变量和方法
+           控制器可以嵌套
+           子控制器可以继承父控制器
+19.$watch&&$apply
+        $watch 方法监视 Model 的变化
+        $apply你需要命令 AngularJS 刷新自已(模型、视图等)
+        angular里面取消定时器是 $interval.cancel(定时器的名字);
+
+
+
+20.ng-href和ng-src
+   ng-href  表达式生效前不要加载该资源,防止空链接
+   ng-src   表达式生效前不引用该资源,防止出现404
+21.ng-model-options
+         ng-model-options:{updateOn:'blur'}  鼠标失焦
+          ng-model-options:{debounce:2000}   延迟2000ms
+22.angular中的事件
+        ng-change
+        ng-copy
+        ng-cut
+        ng-paste
+23. event 事件的监听机制
+     控制器之间的交互
+        $emit发射事件  修改子控制器代码,当数量变化时通知父控制器
+        $on监听子控制器事件  监听子控制器发射的事件
+        $broadcast向下广播   当总价改变，向下通知所有子控制器
+        $broadcast父控制器向下广播   子控制器接收父控制器广播的内容
+     directive指令之间的查找
+         require
+
+     模块之间的依赖
+         先加载依赖模块，先查找依赖的模块，再执行自己的模块，
+         先依赖，之后的appModule模块加载的时候把appModule1的木块的同名控制器覆盖掉了
+     启动多个模块
+         通过angular.bootstrap启动两个模块，第二个参数是启动的模块的名字并且是数组的形式
+             var app1 = angular.module('a1',[]);
+              var app2 = angular.module('a2',[]);
+              app1.controller('ctrl', function ($scope) {
+                  $scope.name = 100;
+              });
+              app2.controller('ctrl', function ($scope) {
+                  $scope.name = 200;
+              });
+              //通过bootstrap方法启动两个模块,第二个参数是启动的模块名字并且是数组的形式
+              angular.bootstrap(div1,['a1']);
+              angular.bootstrap(div2,['a2']);
+
+
+24.input的相关指令
+         ng-disabled 当表单元素被设置disabled属性为true时元素不可用
+         当表单元素被设置readonly属性为true时元素仅读
+
+
+----------------------------------------------------------------------------------
+
+1.创建指令
+   需要使用模块的directive()方法注册指令不需要控制器
+   对象工厂必须返回一个定义对象
+   template string 使用template指定的HTML标记替换指令内容（或指令自身）
+   restrict string 用来限定指令在HTML模板中出现的位置  restrict:'E'
+   replace true,false 是否替换原有的DOM元素  replace:false
+   transclude true,false 是否保留原有指令的内部元素  transclude:true,
+   scope true,false,{} scope属性为指令创建私有的作用域
+   link Function link属性是一个函数，用来在指令中操作DOM树、实现数据
+   绑定
+   compile：函数用来编译模板的，在link函数之前执行，返回link函数
+     compile:function(par1,par2){//参数可变
+         return function(){
+           }}
+   controller： 控制器的实例,在所有指令间共享,可以作为指令交流的通道
+   require:控制器之间的查找  通常：require:^girl
+         require:'girl',//直接写girl表示在当前指令下查找（平级）
+         require:'^girl'//直接写girl表示在当前指令下查找（平级+上一级）
+         require:'?^girl',//找不到的话不报错
+         require:'?girl',//找不到的话不报错
+2.scope
+  @ 把当前属性作为字符串传递。你还可以绑定来自外层scope上的值，在属
+  性中插入{{}}即可
+  = 与父scope中的属性进行双向绑定
+  @符是不支持双向数据绑定 取到的只是字符串
+  支持双向数据绑定，引用的是当前作用域下对应的变量
+  & 方法传递
+3.
+  三个服务 provider server  factory
+    provider:如果发现你定义的服务是用provider定义的会默认调用你的$get方法，并将return返回给你
+             provider是唯一一个支持配置的config 除了provider都是不可配置的
+    factory:工厂函数定义服务，调用该工厂函数将返回服务实例 factory直接返回对象
+    service: service直接给当前的实例添加属性
+       provider是可配置的默认调用$get方法，factory返回的是对象，service直接给当前的实例添加属性，
+  二个常量  constant value
+        constant常量可以进行配置，value不可配置
+  一个装饰
+4.     MVVM
+      控制器不能复用
+      控制器是控制数据的，不是操作DOM
+      控制器之间的交互是事件交互的（on emit broadcast）
+      子控制器会继承父控制器，父无法继承子控制器
+5.公有的属性可以放在 run($rootScope)
+6.遍历数组用track by
+7. ng-show:一开始的时候消耗性能比较大，无论是否成立都会显示
+   ng-if: 会操作DOM元素，很消耗性能 (不成立不会往下走)
+   判断数组是否存在：flag.length
+8.ng-switch
+9.ng-class 和class可以共用
+10.capitalize
+12.服务的作用？
+13.关闭h5自带的表单验证：novalidate
+14.
+
+
+
+
+
+
+
+
+

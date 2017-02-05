@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .red{background: red;}
+        .yellow{color: yellow;}
+        .pink{ outline: 10px pink solid}
+    </style>
+</head>
+<body>
+<div ng-controller="ctrl">
+    <div ng-class="{true:'red',false:'yellow'}[flag]">
+        hello app
+    </div>
+   <!-- <div class="pink" ng-class="{'red':flag,'yellow':flag}">
+        angular baby
+    </div>-->
+    <div  ng-class="s"></div>
+    <!--ngclass和原有的样式不冲突-->
+    <div class="pink"  ng-style="{fontSize:'20px',border:'1px solid red'}" style="font-size:40px">
+        123
+    </div>
+    <!--ng-style绑定的是行能样式-->
+</div>
+<script src="angular.js"></script>
+<script>
+    var app = angular.module('zfModule',[]);
+    app.controller('ctrl', function ($scope) {
+        $scope.flag = true;
+        $scope.s ='pink'
+    });
+    //{true:'red',false:'yellow'}[flag]"同js
+</script>
+</body>
+</html>

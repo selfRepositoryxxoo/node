@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div ng-controller="ctrl">
+    <input type="text" ng-model="name">
+    {{name}}
+    <button ng-click="method()"></button>
+</div>
+<script src="angular.js"></script>
+<script>
+    var app = angular.module('zfModule',[]);
+    app.controller('ctrl', function ($scope,$interval,$timeout) {
+        //监控模型为name的变化
+        //写法1：
+        /*$scope.$watch('name', function (newVal,oldVal) {
+            console.log(newVal,oldVal);
+        });*/
+        //写法2
+        $scope.name = '123';
+        $scope.method = function () {
+                $scope.name = '456';
+            //如果angular已经知道页面刷新了 就不要在去通知他了
+        };
+       /* setInterval(function () {
+            $scope.name++;
+            console.log($scope.name);
+            $scope.$apply()
+        },1000)*/
+        //使用angular自带的定时器
+        /*btn.onclick = function () {
+//            $scope.$apply();
+        };*/
+        var timer = $interval(function () {
+            $scope.name++;
+            //$scope.$apply()已经通知了就不要再通知了
+        },1000);
+        setTimeout(function () {
+            $interval.cancel(timer);//清除定时器
+        },2000);
+        //在销毁后需要取消定时器
+        $scope.$on('$destory', function () {
+            $interval.cancel(timer);
+        });
+        $scope.$watch(function () {
+            return $scope.name;
+        }, function (newVal,oldVal) {
+            console.log(newVal,oldVal);
+        });
+    });
+</script>
+</body>
+</html>

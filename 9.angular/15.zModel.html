@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div ng-controller="ctrl">
+    <input type="text" z-model="age">
+    {{age}}
+</div>
+<script src="angular.js"></script>
+<script>
+    var app = angular.module('zfModule',[]);
+    app.controller('ctrl',function ($scope) {
+        $scope.age = '8';
+    });
+    app.directive('zModel', function () {
+        return {
+            restrict:'A',
+            link: function (scope,element,attrs) {//连接视图和scope的
+                //当前元素input元素
+                element.on('input', function () {
+                    scope[attrs['zModel']] = element.val();
+                    scope.$apply();//告诉angular通知视图
+                });
+                scope.$watch(attrs['zModel'], function (newVal) {
+                    element.val(newVal);
+                });
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

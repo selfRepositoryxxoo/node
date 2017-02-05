@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<my-text a="123"></my-text>
+<div my-text></div>
+<div class="my-text"></div>
+<!-- directive:my-text -->
+<script src="angular.js"></script>
+<script>
+    var app = angular.module('zfModule',[]);
+    //指令分为两种 装饰型  组件式
+    //声明一个指令
+    //在js中如果带-的需要转换成驼峰命名法
+    app.directive('myText', function () {
+        return {
+            restrict:'AEMC',//限制指令的使用范围
+            template:'<div>Hello</div>',//将指令替换成模板
+            replace:true,//默认是将模板插入到里面（将外面模板移除掉）
+            //默认只用E element A attribute C class M comment
+            link: function (scope,element,attrs) {
+                //scope代表当前作用域
+                scope.name = 100; //如果上面有控制器那么取控制器的作用域
+                element//当前的元素，link是唯一个可以操作dom的地方
+                element.html('hello world');//默认是jq对象
+                element.on('click', function () {
+                    alert(1)
+                });
+                console.log(attrs["a"]); //attrs代表当前质量上的所有属性的集合
+            },
+            scope:{}//创建独立作用域，接收不到控制器上的属性
+            //ng-model
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html ng-app="appModule">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Angular整理</title>
+    <link rel="stylesheet" href="bootstrap.css"/>
+    <style type="text/css">
+        [ng-cloak]{
+            display: none;
+        }
+        .back{
+            background: pink;
+        }
+        .back1{
+            background: red;
+        }
+    </style>
+    <script src="angular.js"></script>
+</head>
+<body>
+<br>
+1.解决闪烁<br/>
+        <!--<input type="text" ng-model="name"/>
+        {{name}}
+        <div ng-bind="name"></div>
+        <div ng-cloak>{{name}}</div>-->
+2. ng-bind-template 绑定多组模板<br/>
+ng-init可以用;隔开设置多个初始值
+<!--
+----------------------------------------------------------
+   ng-non-bindable 解除绑定  (有疑问？、、？)
+<input type="text" ng-model="name"/>
+<input type="text" ng-model="age"/>
+<div ng-bind-template="{{name}}{{age}}"></div>
+<div ng-non-bindable>{{name}}</div>-->
+3.ng-model:将生成的模型挂在当前作用域上；<br/>
+<!--
+  ng-init在当前最用下初始定义值，多种值用,号隔开
+<div ng-init="name=[{name:'sunflower',age:18}]"></div>
+<div ng-bind="name[0].name"></div>
+<div ng-bind="name[0].age"></div>-->
+4. ng-repeat代表遍历数据<br/>
+
+<!--
+   (key,val)取出对象中的键，值 ,$index代表当前索引
+   每个 no-repeat 都有$index  想子集用父级的-->
+<!--<div ng-init="student={name:'sunflower',age:18,score:90}">
+      <div ng-repeat="(key,val) in student">
+          {{key}}:{{val}}
+      </div>
+</div>-->
+
+<!--<div ng-init="phones=[{name:'iphone',price:40,type:['白色','金色','玫瑰金']},{name:'htc',price:20,type:['白色']},{name:'xiaomi',price:5,type:['黑色']}]">
+    <div ng-repeat="p in phones" ng-init="index=$index">
+        <div ng-repeat="type in p.type">
+            {{index}}{{type}}
+        </div>
+    </div>
+</div>-->
+
+<!--<div ng-init="phones=[{name:'iphone',price:40,type:['白色','金色','玫瑰金']},{name:'htc',price:20,type:['白色']},{name:'xiaomi',price:5,type:['黑色']}]">
+    <div ng-repeat="(index,p) in phones">
+        <div ng-repeat="type in p.type">
+            {{index}}- {{$index}}-{{type}}
+            {{$even}}-{{$odd}}-{{$first}}-{{$last}}&lt;!&ndash;是否为奇数偶数第一个最后一个&ndash;&gt;
+        </div>
+    </div>
+</div>-->
+
+<!--遍历数据相同，无法遍历，需要通过 track by 遍历
+<div ng-init="phones=['苹果','苹果','苹果']">
+     <div ng-repeat="type in phones track by $index" >
+           {{type}}
+     </div>
+</div>
+
+<div ng-init="phones=[{name:'苹果'},{name:'苹果'},{name:'苹果'}]">
+    <div ng-repeat="type in phones track by $index" >
+        {{p.type}}
+    </div>
+</div>-->
+5.ng-click
+  ng-if
+  控制按钮点击显示隐藏<br/>
+ <!--  <div ng-init="value=true">
+    <button ng-click="value=!value">{{value?"隐藏":"显示"}}</button>
+       <div ng-if="value">content</div>
+     </div>-->
+ <!-- <div ng-init="fruit=['苹果','香蕉']">
+       <div ng-if="fruit.length">
+             <div ng-repeat="f in fruit">
+                  {{f}}
+             </div>
+       </div>
+  </div>-->
+<!--<div ng-init="fruit=[]">
+    <div ng-if="fruit.length">&lt;!&ndash;if不成立的话，内部指令不执行的&ndash;&gt;
+        <div ng-repeat="f in fruit">
+            {{f}}
+        </div>
+    </div>
+</div>-->
+6.ng-switch<br/>
+<!--<input type="text" ng-model="name"/>
+<div ng-switch="name">
+      <div ng-switch-when="hello">你好</div>
+      <div ng-switch-when="sunshine">阳光</div>
+      <div ng-switch-default>向日葵</div>
+</div>-->
+7.ng-class 可以和class共存
+  ng-class的应用<br/>
+<!--<div ng-init="name=true;style='back'">
+    <div class="{{name}}">test1</div>
+    <div ng-class="{true:'back',false:'back1'}[name]">test2</div>
+    <div ng-class="{'back':name,'back1':name}">test3</div>
+    <div ng-class="style">test4</div>
+    <div class="back1" ng-class="style">test4</div>
+</div>-->
+8.ng-include 加载外部模板 引入别的页面<br/>
+<!--<div ng-include="'tmpl.html'"></div>-->
+9.  内置过滤器<br/>
+
+    货币过滤器   currency    currency:'￡' 后面的参数表示钱的种类<br/>
+    大小写转化过滤器 uppercase lowercase   <br/>
+    限制位数    limitTo  limitTo 截取多少位   时间戳 (由13位组成)通常是一个字符序列，唯一地标识某一刻的时间<br/>
+    数字过滤器  number  将数字转成千位符，并四舍五入<br/>
+    对象过滤器  json  转换成json对象<br/>
+    日期过滤器  date   后面是格式 data:'yyyy-MM-dd hh:mm:ss'<br/>
+
+  <!-- <div ng-init="product=[{name:'iphone',price:400},{name:'sunsang',price:300}]">
+          <div ng-repeat="p in product">
+                 {{p.name}}:{{p.price|currency:'$'|limitTo:4}}&lt;!&ndash;limitTo限制字符位数&ndash;&gt;
+        </div>
+    </div>-->
+   <!-- {{'qwertty'|uppercase}}
+    {{'w1234ggg'|limitTo:5}}
+    {{1234.2355|number:2}}&lt;!&ndash;截取小数位数，并四舍五入&ndash;&gt;
+    {{{aa:123,bb:456} | json}}
+    new Date().getTime()
+    1467850195905   获取当前时间戳
+    {{'1467850195905'|date:'yyyy-MM-dd: hh:mm:ss'}}-->
+
+10.orderBy 排序orderBy:'字段名字':'正反序'(true/false)<br/>
+    应用表格排序<br/>
+
+<!--<div ng-init="course=[{name:'珠峰1',chinese:70,math:20},{name:'珠峰2',chinese:90,math:70},{name:'珠峰3',chinese:80,math:30}]">
+    <div ng-init="flag=true;active='chinese'">
+         <table border="1">
+              <tr>
+             <td>姓名</td>
+             <td ng-click="active='chinse'">语文</td>
+             <td ng-click="active='math'">数学</td>
+         </tr>
+             <tr ng-repeat=" c in course|orderBy:active:flag">
+                 <td>{{c.name}}</td>
+                 <td>{{c.chinese}}</td>
+                 <td>{{c.math}}</td>
+             </tr>
+
+         </table>
+    </div>
+</div>-->
+11.equals 比较只要长得-0<br/>
+<!--        console.log(angular.equals({},{})); //true
+        console.log(angular.equals(0,-0));  //true
+        console.log(angular.equals(NaN,NaN)); //true-->
+12.  extend继承方法<br/>
+ <!--   /*  var obj = {a:123},obj1 = {b.txt:456};
+    angular.extend(obj,obj1);
+    console.log(obj); //obj{123456}*/-->
+13.filter使用<br/>
+  filter的用法 filter:query 我们要查询的值(是在所有数据中查询)<br/>
+  filter:{'要搜索的字段'：查询的值}<br/>
+  ng-model-options:{updateOn:'blur'}<br/>
+  ng-model-options:{debounce:2000}<br/>
+<!--<div ng-init="course=[{name:'珠峰1',chinese:70,math:20},{name:'珠峰2',chinese:80,math:74},{name:'珠峰3',chinese:80,math:90}]">
+    <input type="text" ng-model="query" ng-model-options="{debounce:2000}" />
+
+    <div ng-init="flag=true;active='chinese'">
+        <table class="table table-bordered">
+               <tr>
+                   <td>名字</td>
+                   <td ng-click="flag=!flag;active='chinese'">语文</td>
+                   <td ng-click="flag=!flag;active='math'">数学</td>
+               </tr>
+            <tr ng-repeat="c in course |orderBy:active:flag | filter:{chinese:query}">
+                <td>{{c.name}}</td>
+                <td>{{c.chinese}}</td>
+                <td>{{c.math}}</td>
+            </tr>
+        </table>
+    </div>
+</div>-->
+14.作用域上声明方法<br/>
+        <!-- <div ng-controller="ctrl">
+             <div ng-click="sum()">点我</div>
+
+         </div>
+        <script type="text/javascript">
+        var app=angular.module('appModule',[]);
+        app.controller('ctrl',function($scope){
+            $scope.sum=function(){
+                alert("100");
+            }
+        })
+       </script>-->
+15. $scope和$rootscope的区别<br/>
+ <!--   scope是angularJS中的作用域(其实就是存储数据的地方)，很类似javascript的原型链 。搜索的时候，
+优先找自己的scope，如果没有找到就沿着作用域链向上搜索，直至到达根作用域rootScope。
+$rootScope是由angularJS加载模块的时候自动创建的，每个模块只会有1个rootScope。
+rootScope创建好会以服务的形式加入到 $injector中。也就是说通过 $injector.get("$ rootScope ");
+能够获取到某个模块的根作用域。更准确的来说，$rootScope是由angularJS的核心模块ng创建的。
+
+scope是html和单个controller之间的桥梁，数据绑定就靠他了。rootscope是各个controller中scope的桥梁。
+用rootscope定义的值，可以在各个controller中使用-->
+16.控制器的特点<br/>
+<!--        controller和DOM平行
+        控制器可以声明变量和方法
+        控制器可以嵌套
+        子控制器可以继承父控制器-->
+17.$watch和$apply监听
+          <div ng-controller="ctrl">
+              <input type="text" ng-model="name"/>
+          </div>
+        <script type="text/javascript">
+            var app=angular.module('appModule',[]);
+            app.controller('ctrl',function($scope){
+                /*//写法1：
+                 $scope.$watch("name", function (newVal,oldVal) {
+                 console.log(newVal,oldVal);
+                 })*/
+                /* 写法2:
+                 $scope.$watch(function(){
+                 return $scope.name;
+                 },function(newVal,oldVal){
+                 console.log(newVal,oldVal);
+                 })*/
+            })
+        </script>
+18.$watch应用满百包邮<br/>
+<!--          <div ng-controller="ctrl">
+               商品的名称：{{product.name}}<br/>
+               商品的价格：{{product.price}}<br/>
+               商品数量：<input type="text" ng-model="product.count"/><br/>
+               商品的邮费:{{product.ems}}
+               商品的总额:{{total()+product.ems}}
+          </div>
+        <script type="text/javascript">
+            var app=angular.module('appModule',[]);
+            app.controller('ctrl',function($scope){
+                $scope.product={
+                    name:'飞机',count:1,price:20,ems:10
+                }
+                $scope.total=function(){
+                    return $scope.product.count*$scope.product.price;
+                };
+                $scope.$watch($scope.total,function(newVal){
+                    $scope.product.ems=newVal>=100?0:10;
+                })
+            })
+            </script>-->
+19.$apply应用<br/>
+      <!--<div ng-controller="ctrl">
+          {{age}}
+      </div>
+    <script type="text/javascript">
+        var app=angular.module('appModule',[]);
+        app.controller('ctrl',function($scope,$interval,$timeout){
+            $scope.age=1;
+        /* $interval(function(){
+         $scope.age++;
+         },500)//一直执行下去 自带的指令会刷新视图*/
+        /*  $timeout(function(){
+         $scope.age++
+         })//执行一次 自带的指令会刷新视图*/
+        /*  var timer=$interval(function(){
+         $scope.age++;
+         if($scope.age>5)$interval.cancel(timer)//取消定时器用$intervel.cancel
+
+         },500)*/
+        /* setInterval(function(){
+         //每次更新都要通知angular去更新 用$scope.$apply()方法去更新 通知视图刷新
+         $scope.$apply(function(){
+         $scope.age++;
+         })
+         },500)
+         })*/
+    </script>-->
+20.ng-href和ng-src<br/>
+ng-href  表达式生效前不要加载该资源,防止空链接<br/>
+ng-src   表达式生效前不引用该资源,防止出现404 <br/>
+        <!--<div ng-controller="ctrl">
+              &lt;!&ndash; <a ng-href="{{src}}">点我跳转</a>&ndash;&gt;
+            <img ng-src="{{src}}">
+        </div>
+        <script type="text/javascript">
+            var app=angular.module('appModule',[]);
+            app.controller('ctrl',function($scope,$timeout) {
+                /* $timeout(function(){
+                 $scope.src='http://www.baidu.com'
+                 },500)*/
+                //等待数据过来后在渲染图片，防止404
+                $scope.src='https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/logo_white_fe6da1ec.png';
+            })
+        </script>-->
+21.控制器之间的交互 <br/>
+        $emit发射事件  修改子控制器代码,当数量变化时通知父控制器<br/>
+        $on监听子控制器事件  监听子控制器发射的事件 <br/>
+        $broadcast向下广播   当总价改变，向下通知所有子控制器  <br/>
+        $broadcast父控制器向下广播   子控制器接收父控制器广播的内容 <br/>
+        <!--
+        <div ng-controller="parentCtrl">
+            商品总价 <input type="text" ng-model="total">
+            <div ng-controller="childCtrl">
+                商品的名称 {{product.name}} <br>
+                商品的单价 {{product.price}} <br>
+                商品的数量 <input type="text" ng-model="product.count" ng-change="computed()">
+            </div>
+            </div>
+            <script type="text/javascript">
+                var app=angular.module('appModule',[]);
+                app.controller('parentCtrl', function ($scope) {
+                    $scope.toal=50;
+                    $scope.$on('all',function(event,data.txt){
+                        $scope.total=data.txt;//data代表的是儿子传递过来的总价格
+                    });
+                    $scope.$watch('total',function(newVal,oldVal){
+                        //向下发布告诉字控制器
+                        $scope.$broadcast('money',newVal);
+                    });
+                });
+                app.controller('childCtrl', function ($scope) {
+                    $scope.product={
+                        name:'飞机',
+                        price:50,
+                        count:1
+                    }
+                    $scope.computed=function(){
+                        var total=$scope.product.price*$scope.product.count;
+                        $scope.$emit('all',total);
+                    };
+                    $scope.$on('money',function(event,data.txt){
+                        $scope.product.count=data.txt/$scope.product.price;
+                    })
+                });
+            </script>-->
+22.表单元素
+        ng-disabled 当表单元素被设置disabled属性为true时元素不可用 <br/>
+        当表单元素被设置readonly属性为true时元素仅读 <br/>
+<!--
+<table class="table-responsive table" ng-controller="carCtrl">
+    <tr>
+        <td>全选 <input type="checkbox" ng-model="checks" ng-click="checkAll()"></td>
+        <td>商品</td>
+        <td>单价</td>
+        <td>数量</td>
+        <td>小计</td>
+        <td>操作</td>
+    </tr>
+    <tr ng-repeat="book in books">
+        <td><input type="checkbox" ng-model="book.selected" ng-click="select()"></td>
+        <td>{{book.name}}</td>
+        <td>{{book.price}}</td>
+        <td><button ng-click="book.count=book.count-1" ng-disabled="book.count==1">-</button>
+            <input type="text" ng-model="book.count" ng-readonly="true">
+            &lt;!&ndash;让当前的输入框是仅读状态用户不能修改只可以看&ndash;&gt;
+            <button ng-click="book.count=book.count+1">+</button>
+        </td>
+        <td>{{book.price*book.count}}</td>
+        <td><button class="btn btn-danger" ng-disabled="!book.selected" ng-click="remove(book)">删除</button></td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            总价格{{total()}} <button class="btn btn-primary" ng-click="removeSelect()">删除选中商品</button>
+        </td>
+    </tr>
+</table>
+<script>
+    //禁用事件 ng-disable 如果值为true表示当前不可用
+    var app = angular.module('appModule',[]);
+    app.controller('carCtrl', function ($scope) {
+        $scope.books = [
+            {name:'AngularJS',price:40,count:1,selected:false},
+            {name:'NodeJS',price:80,count:1,selected:false},
+            {name:'ReactJS',price:20,count:1,selected:false},
+            {name:'VUE',price:60,count:1,selected:false},
+            {name:'java',price:100,count:1,selected:false},
+            {name:'php',price:200,count:1,selected:false}
+        ];
+        $scope.checkAll = function () {
+            //当前的全选状态
+            var cur = $scope.checks;
+            angular.forEach($scope.books, function (item) {
+                item.selected = cur;
+            });
+        }
+        $scope.select = function () {
+            var flag = true;
+            angular.forEach($scope.books, function (item) {
+                if(!item.selected)flag=false;
+            });
+            //有一个没有被选中 那全选状态必然为false 否则依然为true
+            $scope.checks = flag;
+        };
+        $scope.remove = function (book) {
+            //filter 数组里的方法过滤
+            //将不满足条件的过滤掉 满足的组成一个新的数组
+            $scope.books = $scope.books.filter(function (item) {
+                //将不删除的返回
+                return item!=book;
+            })
+        };
+        $scope.total = function () {
+            var sum = 0;
+            angular.forEach($scope.books, function (item) {
+                //如果被选中我们进行累加
+                if(item.selected){
+                    sum+=item.price*item.count;
+                }
+            });
+            return sum;
+        }
+        $scope.removeSelect = function(){
+            angular.forEach($scope.books,function(book){
+                //如果当前书被选中
+                if(book.selected)
+                {
+                    //调用删除每一本书
+                    $scope.remove(book);
+                }
+            });
+        }
+    });
+    //购物车
+</script>-->
+
+--------------------------------------------------------------------------------------------------------------------</br>
+
+1.指令dirctive </br>
+<!--<div ng-controller="ctrl">
+    <my-directive></my-directive>
+    <div>Hello{{name}}</div>
+</div>
+<script>
+      var app=angular.module('appModule',[]);
+      app.controller('ctrl',['$scope', function ($scope) {
+        $scope.name = 'zfpx';
+      }]);
+       app.directive('myDirective',function(){
+           return {
+               restrict:'EA',//限定执行的使用范围
+               template:'<div>Hello{{name}}</div>', //指定的HTML标记替换指令内容（或指令自身)
+               replace:true,//是否替换原有的DOM元素
+               link:function(scope,element,attrs){
+                     scope.name='tc'
+               }
+           }
+       })
+</script>
+
+-->
+2.pannel 面板<br/>
+
+<my-directive title="这是第一个标题">
+    这是第一个模板里面的内容
+</my-directive>
+<my-directive title="这是第二个标题">
+    这是第二个模板里面的内容
+</my-directive>
+<my-directive title="这是第三个标题">
+    这是第三个模板里面的内容
+</my-directive>
+
+<!--<script>
+    var app=angular.module('appModule',[]);
+    app.directive('myDirective',function(){
+        return{
+            restrict:'EA',
+            templateUrl:'test.html',
+            replace:true,
+            transclude:true,
+            scope:{},
+            link:function(scope,element,attrs){
+                scope.title=attrs['title'];
+            }
+        }
+    })
+</script>-->
+<script>
+    var app = angular.module('appModule',[]);
+    app.directive('myDirective', function () {
+        return {
+            restrict:'E',
+            //指定模板路径
+            templateUrl:'test.html',
+            replace:false, //如果把原有的指令替换掉 根节点必须只有一个
+            //将指令的内部的代码保留下来，放到指定ng-transclude的标签内
+            transclude:true,
+            scope:{}, //可以指定scope:{}
+            link: function (scope,element,attrs) {
+                scope.title = attrs["title"];//如果直接在作用域声明title那最后就保留最后，所以我们要给每一个指令，设置独立作用域
+            }
+        }
+    })
+
+</script>
+
+</body>
+</html>

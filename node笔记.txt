@@ -1,0 +1,173 @@
+1.Node.js
+
+  1-- 是一个让JS可以运行在浏览器之外的服务器端的平台,它实现了诸如文件系统、模块、包、操作系统API，网络通信等核心JS没有或不完善的功能,摒弃传统平台依赖多线程来实现高并发的设计思路，而采用单线程，异步式I/O，事件驱动式的程序设计模型,Node.js使用了来自于Google ChromeV8引擎。V8是目前世界上最快的Javascript引擎
+
+  2-- 内置核心 ： fs http url path string_decoder
+
+2. node服务器端 this是global 是一个  module exports是 {}空对象
+
+   1-- console error--错误信息   warn--警告   info--信息  console.time---consoletimeEnd 计算代码执行时间 如果是异步代码 timeEnd需要放到异步代码中
+
+   2-- __dirname当前文件夹目录(不可修改)  __filname当前文件的路径 
+
+      两者都是通过外界传入的 可以直接操作 不用在前面打点加主体
+   
+
+   3-- setImmediate是第二个小本上的任务 是给timeout一些机会略先执行  
+   	如果两者时间相同则按顺序执行
+   	如果timeout时间比setImmediate大则setImmediate执行 
+   	如果setImmediate时间过大 则timeout先执行
+
+   	process.nextTick比setImmediate优先级高
+
+3.process
+  
+  process.chdir 改变工作目录 不能改变文件夹
+  process.cwd   当前工作目录 (current working directory)
+  process.stdin.on('data',fun(data){})监听用户输入 标准输入 data是监听到的数据 console.log调用此方法
+  process.stdout.write  监听用户输出
+  process.memoryUsage  监听内存使用量 检测内存泄露
+
+4.require 是同步方法 异步是不能通过返回值接收的
+  
+  使用模块先进行require导入
+
+  require.resolve('') 根据文件名解析绝对路径
+  require.cache[]     讲路径放入缓存中  多次加载同一模块 第一次将其缓存下来下次加载走缓存 删除用delete require.cache[]
+
+  (function (exports,require,module,__dirname,__filename) { //模块化 返回对象 暴露接口 __dirname __filename 是通过外界传进来的，所以可以在文件中访问
+    exports = module.exports = {};  
+    function Person (){}
+    exports = module.exports = {person:Person};
+    return module.exports;//如果导出的是引用数据类型 用module.exports =Function  })();
+   
+    exports导出模块
+
+5.util 内置的
+  
+  1-- (继承方法)//Child.prototype = new Parent();
+           //Child.prototype.__proto__ = Parent.prototype;
+           //Child.prototype = Object.create(Parent.prototype);var child = new Child();
+             console.log(child.smile)
+
+  2-- util.inherits(子类，父类)  继承
+  	util.inspect(obj) 解析对象 打印出详细信息 默认调用 console.dir()
+  	util.inspect(obj,{showHidden:true,depth:2,colors:true}
+  	showHidden：将不可枚举的也解析出来 默认是false
+  	depth:深度解析 告诉inspect 当格式化对象时递归多少次  默认是2  写null无限递归传递
+  	colors改变控制台打印出的颜色 默认false
+
+  3-- Object.defineProperty(obj,'age',{//定义属性  默认不可枚举的
+    	value:100, //当前设置的值
+    	enumerable:true, //设置可枚举
+    	writable:false,//是否可被重写
+    	configurable:false//是否可配置   });
+ 
+  4-- 判断类型 
+  	util.isArray([])  
+	util.isError(new Error())  
+	util.isRegExp(/^$/)  
+	util.isDate(new Date())
+
+6. 引入模块
+
+   如果没有./就是核心模块 或者第三方模块
+   npm init -y 一键生成package.json文件
+   模块查找规则
+   如果找不到模块 会查找到index 找到依然可以返回
+   当前目录没有 往上级找 直到根目录
+   第三方查找规则是根据module.paths来查找的
+   如果文件没有后缀 会尝试添加.js 或者.json  建议写后缀名
+
+7.Buffer  缓冲区Buffer是暂时存放输入输出数据的一段内存
+
+  转10进制          parseInt('要转的内容','当前进制')
+
+  10进制转任意进制  (10进制数).toString(要转的进制)
+
+  
+  1-- buffer是16进制 逢16进一
+
+  	放到缓存区中的字节数需要提前确定 一旦确定不能更改
+  	一个字节由8个位组成 utf8下由3个字节组成
+  
+  2-- new Buffer()参数可为 
+  	创建方式 1-数字:指定大小  2-数组:[]  3-字符串:可以设定编码 不支持gbk
+  	buffer.fill(0)清除buffer
+  	buffer的length是按照字节算的
+
+  3-- buffer转字符串 buffer.toString(编码,开始,结束) 
+
+      字符串转buffer  new buffer(str,编码)
+  
+  4-- string_decoder 把buffer转为字符串
+  	var String_decoder = require('string_decoder').StringDecoder;
+  	var sd = new String_decoder; //实例化一个buffer字符串对象
+
+  5-  buffer.copy() 复制buffer
+
+  	参数：targetBuffer 目标buffer 
+              targetStart  目标开始索引
+              sourceStart  原buffer开始位置
+              sourceEnd    原buffer结束位置
+
+  6-- Buffer.isBuffer 判断是否是buffer
+
+  7-- buffer.concat([]);以数组形式
+
+  Buffer.myConcat = function (list,totalLength) {
+    if(list.length==1){
+        return list[0];
+    }
+    if(typeof totalLength=='undefined'){
+        totalLength  = 0;
+        list.forEach(function (item) {
+            totalLength+=item.length;
+        });
+    }
+    var buffer = new Buffer(totalLength);
+    var index = 0;
+    list.forEach(function (item) {
+        item.copy(buffer,index);
+        index+= item.length;
+    }); 
+    return buffer.slice(0,index);
+};
+   
+
+8. fs 
+
+   fs.readFile('src',fun(err,data))   fs.readFileSync('src'.{flag:'',encoding:'utf8'})
+   
+   Object.keys(obj).length 获得对象属性的长度 keys是数组
+
+   fs.writeFileSync  fs.writeFile  fs.appendFileSync
+
+   fs.readdirSync  fs.statSync 查看文件状态  fs.isDirectory 检测是否为文件目录  fs.isFile 检测是否为文件
+  
+   fs.rmdirSync 移除文件目录  fs.unlinkSync  移除文件
+
+   fs.watchFile 监听文件
+
+9. path
+
+   path.join('a','b') 拼接路径 以自己系统的分隔符 (支持上个目录 支持多个) 
+
+   path.resolve('..','a.js/')  解析绝对路径 
+  
+   path.normalize()转为合法路径
+
+   path.basename('a.js','.js') 获得文件基本名字 
+
+   path.extname 获得文件后缀名
+
+   path.basename('a.js','.js')+path.extname('b.png') 生成a.png
+  
+   path.sep 获得目录分隔符
+
+   path.delimiter 特定平台分隔符 可以区分mac/window
+   
+   
+   
+  
+   

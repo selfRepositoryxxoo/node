@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="bootstrap.css">
+</head>
+<body>
+<div ng-controller="ctrl">
+    <table class="table table-responsive">
+        <tr>
+            <td>书的名字</td>
+            <td>书的数量</td>
+            <td>书的价格</td>
+        </tr>
+        <tr ng-repeat="book in books">
+            <td>{{book.name}}</td>
+            <td>{{book.count}}</td>
+            <td>{{book.price}}</td>
+        </tr>
+    </table>
+    <input type="text" ng-model="query" ng-change="getOne()">
+    <div class="form-group">
+        <label class="control-label">书的名字</label>
+        <input type="text" ng-model="list.name" class="form-control">
+    </div>
+    <div class="form-group">
+        <label class="control-label">书的数量</label>
+        <input type="text" ng-model="list.count" class="form-control">
+
+    </div>
+    <div class="form-group">
+        <label class="control-label">书的价格</label>
+       <input type="text" ng-model="list.price" class="form-control">
+    </div>
+    <button ng-click="save()" class="btn btn-primary">增加书</button>
+</div>
+<script src="angular.js"></script>
+<script>
+    var app = angular.module('zfModule',[]);
+    app.controller('ctrl', function ($scope,$http) {
+        $http({
+            url:'/books',
+            method:'GET'
+        }).success(function (data) {
+            //请求回来的被转换成json
+            $scope.books = data;
+        });
+        
+        $scope.getOne = function () {
+            var id = $scope.query;
+            console.log(id);
+            $http({
+                url:'/book',
+                method:'GET',
+                params:{id:id}//求求查询的id值
+            }).success(function (data) {
+                //请求回来的被转换成json
+                $scope.book = data;
+                console.log($scope.book);
+            });
+        };
+
+        //增加
+        $scope.save = function () {
+            $http({
+                url:'/save',
+                method:'post',
+                data:$scope.list
+            }).success(function (data) {
+                console.log(data);
+            })
+        };
+        
+        
+        //需要获取数据ajax
+        /*$.ajax({
+            url:'',
+            method:'',
+            data:'',
+        }).success(function () {
+            
+        }).error(function () {
+            
+        })*/
+    })
+</script>
+</body>
+</html>

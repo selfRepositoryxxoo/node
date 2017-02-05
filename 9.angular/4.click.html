@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div ng-controller="ctrl" >
+    <div ng-if="flag.length">
+        <div ng-repeat="f in flag track by $index">
+            {{f}}
+        </div>
+    </div>
+    <!--<div ng-mouseover="flag=true" ng-mouseout="flag=false" style="border: 1px solid red">123</div>
+    <div style="width: 100px;height: 100px;background: yellow" ng-if="flag"></div>-->
+</div>
+
+<script src="angular.js"></script>
+<script>
+    var app = angular.module('zfModule',[]);
+    app.controller('ctrl', function ($scope) {
+        $scope.flag = [
+                "苹果","苹果"
+        ]
+
+    });
+    //ng-show / ng-hide / ng-if
+    //当ng-show值为true时候 当前为显示状态，只是简单操作样式
+    //ng-if如果不满足那么就直接在dom中移除掉，并且内部指令不执行
+
+    //如果在一开始可以确定是true或者false并且不改变就用ng-if
+    //ng-show一开始消耗性能比较大，无论是否成立都执行内部指令
+    //ng-if频繁切换消耗较大
+</script>
+</body>
+</html>

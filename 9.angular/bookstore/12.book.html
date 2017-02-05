@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="bootstrap.css">
+</head>
+<body>
+<div ng-controller="ctrl">
+    <input type="text" ng-model="query" ng-model-options="{updateOn:'blur'}">
+    <table class="table table-responsive">
+        <tr>
+            <td>书的名字</td>
+            <td>书的数量</td>
+            <td>书的价格</td>
+            <td>修改书</td>
+        </tr>
+        <tr ng-repeat="book in books">
+            <td>{{book.name}}</td>
+            <td><input type="text" ng-model="book.count"></td>
+            <td><input type="text" ng-model="book.price"></td>
+            <td><button class="btn btn-primary" ng-click="update(book)">修改</button></td>
+            <td><button class="btn btn-primary" ng-click="delete(book.id)">删除</button></td>
+        </tr>
+    </table>
+    <div class="form-group">
+        <label class="control-label">书的名字</label>
+        <input type="text" ng-model="list.name" class="form-control">
+    </div>
+    <div class="form-group">
+        <label class="control-label">书的数量</label>
+        <input type="text" ng-model="list.count" class="form-control">
+    </div>
+    <div class="form-group">
+        <label class="control-label">书的价格</label>
+       <input type="text" ng-model="list.price" class="form-control">
+    </div>
+    <button ng-click="save()" class="btn btn-primary">增加书</button>
+</div>
+<script src="angular.js"></script>
+<script src="angular-resource.js"></script>
+<script>
+    var app = angular.module('zfModule',['ngResource']);
+    app.factory('book', function ($resource) {
+        return $resource('/book/:id',{
+            id:'@id'
+        },{
+            update:{
+                method:'PUT'
+            }
+        })
+    });
+    app.controller('ctrl', function ($scope,book) {
+        $scope.books = book.query();
+        $scope.list = {}
+        $scope.$watch('query', function (newVal) {
+            $scope.books = book.query({id:newVal});
+        });
+        $scope.save = function () {
+            //当保存完后在次查找
+            book.save($scope.list).$promise.then(function () {
+                $scope.books = book.query();
+                $scope.list = {}
+            })
+        };
+        $scope.update = function (b) {
+            book.update(b).$promise.then(function () {
+               alert('成功');
+            })
+        };
+        $scope.delete = function (id) {
+            book.delete({id:id}).$promise.then(function () {
+                $scope.books = book.query();
+            });
+        };
+        //对应的方法有get 获得的默认是对象 get
+        //query方法获取的是数组  get
+        //save方法默认是保存   post
+        //delete默认是删除    delete
+        //update默认是修改   put
+    })
+
+
+</script>
+</body>
+</html>

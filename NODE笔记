@@ -1,0 +1,207 @@
+1.IO:
+    Input:(输入)：从文件系统中读取文件
+    Output:(输出)：从文件系统中读取文件
+2.单线程/多线程
+   单线程程序：指的是程勋按顺序执行，前面流程执行完毕之后后面的流程才能执行
+   多线程指的是同时可以执行多个任务，通过系统线程上下文切换来弥补同步式IO调用时的时间
+   NODE单线程指的是主线程是单线程的，所有阻塞的部分交给一个线程池处理，然后这个主线程同伙一个队列跟线程池协作
+3.NODE.js中的全局对象
+    js:window
+    node.js:global
+4.__dirname
+    //c:\Users\10354_000\Desktop\node6\2.node
+    //__dirname表示当前文件夹的名字，他是不可更改的
+    console.log(__dirname);
+    onsole.log(__dirname);
+    //c:\Users\10354_000\Desktop\node6\2.node\2.global.js
+    //当前文件的绝对路径
+    console.log(__filename);
+    console.log(global);
+5.setTimeout 和setImmediate
+    和setTimeout作用差不多
+6. process  --cwd  --chdir --stdin  --memoryUsage
+    process.chdir 改变工作目录 不能改变文件夹
+    process.cwd   当前工作目录 (current working directory)
+    process.stdin.on('data',fun(data){})监听用户输入 标准输入 data是监听到的数据 console.log调用此方法
+    process.stdout.write  监听用户输出
+    process.memoryUsage  监听内存使用量 检测内存泄露
+7.require引入模块
+    require 是同步方法 异步是不能通过返回值接收的
+     使用模块先进行require导入
+     require.resolve('') 根据文件名解析绝对路径
+     require.cache[]     讲路径放入缓存中  多次加载同一模块 第一次将其缓存下来下次加载走缓存 删除用delete require.cache[]
+    (function (exports,require,module,__dirname,__filename) { //模块化 返回对象 暴露接口 __dirname __filename 是通过外界传进来的，所以可以在文件中访问
+        exports = module.exports = {};
+        function Person (){}
+        exports = module.exports = {person:Person};
+        return module.exports;//如果导出的是引用数据类型 用module.exports =Function  })();
+        exports导出模块
+8.utils
+    1.只继承公有的方法：、
+         Child.prototype = new Parent();
+         Child.prototype.__proto__ = Parent.prototype;
+         Child.prototype = Object.create(Parent.prototype);
+    2.  util.inherits(子类，父类)  继承
+        util.inspect(obj) 解析对象 打印出详细信息 默认调用 console.dir()
+        util.inspect(obj,{showHidden:true,depth:2,colors:true}
+        showHidden：将不可枚举的也解析出来 默认是false
+        depth:深度解析 告诉inspect 当格式化对象时递归多少次  默认是2  写null无限递归传递
+        colors改变控制台打印出的颜色 默认false
+
+    3.Object.defineProperty(obj,'age',{//定义属性  默认不可枚举的
+        value:100, //当前设置的值
+        enumerable:true, //设置可枚举
+        writable:false,//是否可被重写
+        configurable:false//是否可配置   });
+    4.判断类型
+            console.log(util.isArray([]));
+            console.log(util.isError(new Error()));
+            console.log(util.isRegExp(/^$/));
+            console.log(util.isDate(new Date()));
+
+6. 引入模块
+
+   如果没有./就是核心模块 或者第三方模块
+   npm init -y 一键生成package.json文件
+   模块查找规则
+   如果找不到模块 会查找到index 找到依然可以返回
+   当前目录没有 往上级找 直到根目录
+   第三方查找规则是根据module.paths来查找的
+   如果文件没有后缀 会尝试添加.js 或者.json  建议写后缀名
+
+7.Buffer  缓冲区Buffer是暂时存放输入输出数据的一段内存
+
+  转10进制          parseInt('要转的内容','当前进制')
+
+  10进制转任意进制  (10进制数).toString(要转的进制)
+
+
+  1-- buffer是16进制 逢16进一
+
+  	放到缓存区中的字节数需要提前确定 一旦确定不能更改
+  	一个字节由8个位组成 utf8下由3个字节组成
+
+  2-- new Buffer()参数可为
+  	创建方式 1-数字:指定大小  2-数组:[]  3-字符串:可以设定编码 不支持gbk
+  	buffer.fill(0)清除buffer
+  	buffer的length是按照字节算的
+
+  3-- buffer转字符串 buffer.toString(编码,开始,结束)
+
+      字符串转buffer  new buffer(str,编码)
+
+  4-- string_decoder 把buffer转为字符串
+  	var String_decoder = require('string_decoder').StringDecoder;
+  	var sd = new String_decoder; //实例化一个buffer字符串对象
+
+  5-  buffer.copy() 复制buffer
+
+  	参数：targetBuffer 目标buffer
+              targetStart  目标开始索引
+              sourceStart  原buffer开始位置
+              sourceEnd    原buffer结束位置
+
+  6-- Buffer.isBuffer 判断是否是buffer
+
+  7-- buffer.concat([]);以数组形式
+
+  Buffer.myConcat = function (list,totalLength) {
+    if(list.length==1){
+        return list[0];
+    }
+    if(typeof totalLength=='undefined'){
+        totalLength  = 0;
+        list.forEach(function (item) {
+            totalLength+=item.length;
+        });
+    }
+    var buffer = new Buffer(totalLength);
+    var index = 0;
+    list.forEach(function (item) {
+        item.copy(buffer,index);
+        index+= item.length;
+    });
+    return buffer.slice(0,index);
+};
+
+
+8. fs（如果是个异步函数，最后一个参数一定是回调函数）
+  //异步需要传一个回调函数
+   var fs=require('fs')
+  1.读文件
+    //同步
+     fs.readFileSync('src'.{flag:'',encoding:'utf8'})
+      //异步
+    fs.readFile('src',fun(err,data){})
+     Object.keys(obj).length 获得对象属性的长度 keys是数组
+  2.写文件
+   //同步
+  fs.writeFileSync('./2.txt','我们',{encoding:'utf8'});
+   //异步
+   fs.writeFile('./2.txt','幸福',{encoding:'utf8'},function(err){
+
+   })
+  3.拷贝文件
+      //同步
+        function copy(source,target){
+         var data = fs.readFileSync(source,'utf8');
+          fs.writeFileSync(target,data);
+         }
+         copy('./2.txt','./data.txt');
+      //异步
+    function copy(source,target){
+         //异步的读取通过回调函数的方式，data读到的数据
+         fs.readFile(source, function (err,data) {
+              if(!err){
+                   //如果没有错误，写入到文件中将data数据
+                   fs.writeFile(target,data, function (err, data) {
+                   });
+              }
+         });
+    }
+    copy('./2.txt','./data.txt');
+    4.目录操作
+        4.1.创建目录mkdir
+        //同步
+           /*fs.mkdirSync('a/b')*/
+         //异步
+         fs.mkdir('c/t',function(err){
+                  console.log(err)
+           })
+         4.2.读取目录下文件readdir
+             fs.readdir('./a',function(err,files){
+                    console.log(files);
+                    files.forEach(function(file){
+                          fs.readFile('./a/'+file,function(err,data){
+                               console.log(data.toString())
+                          })
+                    })
+                })
+         4.3 stat获得文件的详细描述
+             fs.stat('./a',function(err,sta){
+                     console.log(arguments)
+             })
+         4.4判断文件是否存在
+           fs.exists('./a',function(exists){
+               console.log(exists)   -->true
+           })
+
+
+
+
+
+9.路径处理 path
+            var path=require('path');
+            9.1 join 多个路径拼接
+                console.log(path.join(__dirname,'a'))
+                //E:\珠峰培训\node课程\4.周末班第二天7.10\fs\a
+            9.2得到绝对路径
+                console.log(path.resolve(__dirname,'a','b','...'))
+            9.3 basename获取路径中的文件名
+                console.log(path.basename(__filename))
+            9.4  extname获取一个路径中的扩展名
+                console.log(path.extname(__filename))
+            9.4  path.sep操作系统提定文件分割符
+                console.log(path.sep)
+            9.5  path.delimiter属性值为系统指定的环境变量路径分割符
+                console.log(path.delimiter)
