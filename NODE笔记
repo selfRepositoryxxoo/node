@@ -194,7 +194,7 @@
             var path=require('path');
             9.1 join 多个路径拼接
                 console.log(path.join(__dirname,'a'))
-                //E:\珠峰培训\node课程\4.周末班第二天7.10\fs\a
+               
             9.2得到绝对路径
                 console.log(path.resolve(__dirname,'a','b','...'))
             9.3 basename获取路径中的文件名
